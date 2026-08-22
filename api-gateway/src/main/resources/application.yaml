@@ -1,0 +1,19 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: recipe-service
+          # 'RECIEPE' must exactly match the spring.application.name of your backend service
+          uri: lb://RECIEPE
+          predicates:
+            - Path=/api/recipes/**
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+

@@ -1,0 +1,16 @@
+# Java/Spring Boot ignores
+target/
+*.jar
+*.war
+.mvn/
+mvnw
+mvnw.cmd
+.idea/
+*.iml
+.DS_Store
+
+# React ignores
+node_modules/
+build/
+dist/
+.env
