@@ -1,4 +1,4 @@
-package com.example.api_gateway.config;
+package com.example.apigateway;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,7 +35,7 @@ public class SecurityConfig {
         UserDetails user = User.withDefaultPasswordEncoder()
             .username("admin")
             .password("password")
-            .roles("USER")
+            .roles("ADMIN")
             .build();
         return new MapReactiveUserDetailsService(user);
     }
