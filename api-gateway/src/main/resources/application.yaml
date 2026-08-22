@@ -5,6 +5,17 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "http://localhost:3001" # Change this if your UI runs on a different port
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
       routes:
         - id: recipe-service
           # 'RECIEPE' must exactly match the spring.application.name of your backend service

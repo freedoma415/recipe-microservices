@@ -2,12 +2,10 @@ package com.example.apigateway;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
@@ -17,26 +15,17 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
-            .csrf(ServerHttpSecurity.CsrfSpec::disable)
+            // Use Customizer.withDefaults() to link with your application.yml CORS settings
+            .cors(Customizer.withDefaults())
+            .csrf(csrf -> csrf.disable())
             .authorizeExchange(exchanges -> exchanges
-                // Allow public access to specific endpoints if needed (e.g., Eureka UI or Auth routes)
-                .pathMatchers("/eureka/**").permitAll()
-                // Require authentication for all other API requests
+                // Allow the browser's CORS preflight checks
+                .pathMatchers(HttpMethod.OPTIONS).permitAll()
+                // Secure everything else
                 .anyExchange().authenticated()
             )
             .httpBasic(Customizer.withDefaults());
-        
+            
         return http.build();
-    }
-
-    @Bean
-    public MapReactiveUserDetailsService userDetailsService() {
-        // A hardcoded in-memory user for initial testing
-        UserDetails user = User.withDefaultPasswordEncoder()
-            .username("admin")
-            .password("password")
-            .roles("ADMIN")
-            .build();
-        return new MapReactiveUserDetailsService(user);
     }
 }
