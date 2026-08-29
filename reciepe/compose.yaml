@@ -1,10 +1,11 @@
 services:
   mysql:
-    image: 'mysql:latest'
-    environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+    image: mysql:8.0
+    container_name: recipe-mysql
     ports:
-      - '3306'
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: taskdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: root
