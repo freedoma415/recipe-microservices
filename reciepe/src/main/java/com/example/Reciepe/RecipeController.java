@@ -1,4 +1,4 @@
-package com.example.reciepe;
+package com.example.Reciepe;
 
 import java.util.List;
 
@@ -42,6 +42,6 @@ public class RecipeController {
 
     @DeleteMapping("/delete/{id}")
     public void deleteRecipe(@PathVariable Long id) {
-        recipeService.deleteRecipe(id); 
+        recipeService.deleteRecipe(id);
     }
 }

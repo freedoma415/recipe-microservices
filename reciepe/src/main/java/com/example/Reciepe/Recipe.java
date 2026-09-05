@@ -1,4 +1,4 @@
-package com.example.reciepe;
+package com.example.Reciepe;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,12 +21,16 @@ public class Recipe {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(columnDefinition = "TEXT")
+    private String Ingridents;
+
     // Constructors
     public Recipe() {}
 
-    public Recipe(String name, String description) {
+    public Recipe(String name, String description, String ingridents) {
         this.name = name;
         this.description = description;
+        this.Ingridents = ingridents;
     }
 
     // Getters and Setters
@@ -36,4 +40,6 @@ public class Recipe {
     public void setName(String name) { this.name = name; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
+    public String getIngridents() { return Ingridents; }
+    public void setIngridents(String ingridents) { this.Ingridents = ingridents; }
 }

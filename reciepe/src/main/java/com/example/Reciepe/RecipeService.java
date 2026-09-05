@@ -1,4 +1,4 @@
-package com.example.reciepe;
+package com.example.Reciepe;
 
 import java.util.List;
 
