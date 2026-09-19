@@ -15,16 +15,15 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http
-            // Use Customizer.withDefaults() to link with your application.yml CORS settings
             .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeExchange(exchanges -> exchanges
-                // Allow the browser's CORS preflight checks
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                // Secure everything else
-                .anyExchange().authenticated()
+                .pathMatchers("/auth/login", "/actuator/**").permitAll()
+                .anyExchange().permitAll()
             )
-            .httpBasic(Customizer.withDefaults());
+            .httpBasic(basic -> basic.disable())
+            .formLogin(form -> form.disable());
             
         return http.build();
     }

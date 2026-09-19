@@ -1,5 +1,6 @@
 server:
   port: 8080
+
 spring:
   security:
     user:
@@ -12,7 +13,11 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowedOrigins: "http://localhost:3001" # Change this if your UI runs on a different port
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:3001"
+              - "http://localhost:3002"
+              - "http://localhost:8080"
             allowedMethods:
               - GET
               - POST
@@ -21,8 +26,14 @@ spring:
               - OPTIONS
             allowedHeaders: "*"
       routes:
+        - id: drop-noise
+          uri: no://op
+          predicates:
+            # Catch stray actuator requests on port 8080 and blackhole them
+            - Path=/.well-known/**, /404, /actuator/**
+          filters:
+            - SetStatus=404
         - id: recipe-service
-          # 'RECIEPE' must exactly match the spring.application.name of your backend service
           uri: lb://RECIEPE
           predicates:
             - Path=/api/recipes/**
@@ -32,8 +43,23 @@ spring:
           predicates:
             - Path=/**
 
+        - id: notification-service
+          uri: lb://NOTIFICATIONSERVICE
+          predicates:
+            - Path=/api/notifications/**
+
 eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8761/eureka/
 
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  metrics:
+    tags:
+      application: api-gateway
