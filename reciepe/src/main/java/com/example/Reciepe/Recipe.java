@@ -22,15 +22,15 @@ public class Recipe {
     private String description;
 
     @Column(columnDefinition = "TEXT")
-    private String Ingridents;
+    private String ingredients;
 
     // Constructors
     public Recipe() {}
 
-    public Recipe(String name, String description, String ingridents) {
+    public Recipe(String name, String description, String ingredients) {
         this.name = name;
         this.description = description;
-        this.Ingridents = ingridents;
+        this.ingredients = ingredients;
     }
 
     // Getters and Setters
@@ -40,6 +40,6 @@ public class Recipe {
     public void setName(String name) { this.name = name; }
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
-    public String getIngridents() { return Ingridents; }
-    public void setIngridents(String ingridents) { this.Ingridents = ingridents; }
+    public String getIngredients() { return ingredients; }
+    public void setIngredients(String ingredients) { this.ingredients = ingredients; }
 }

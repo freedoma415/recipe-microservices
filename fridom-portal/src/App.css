@@ -1,0 +1,126 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: #0f172a; /* Deep slate background */
+  color: #f8fafc;
+}
+
+.portal-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.portal-header {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  padding: 60px 20px;
+  text-align: center;
+  border-bottom: 1px solid #334155;
+}
+
+.portal-header h1 {
+  font-size: 3rem;
+  margin: 0 0 10px 0;
+  background: -webkit-linear-gradient(#38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #94a3b8;
+  margin-bottom: 20px;
+}
+
+.tech-stack {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.portal-main {
+  flex: 1;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.section-title h2 {
+  font-size: 2rem;
+  margin: 0 0 10px 0;
+}
+
+.section-title p {
+  color: #94a3b8;
+}
+
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.service-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 24px;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.service-card:hover {
+  transform: translateY(-5px);
+  border-color: #38bdf8;
+  box-shadow: 0 10px 25px rgba(56, 189, 248, 0.1);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.service-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.25rem;
+}
+
+.service-card p {
+  color: #94a3b8;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  margin-top: 15px;
+  align-self: flex-start;
+}
+
+.status-badge.active { background: rgba(34, 197, 94, 0.2); color: #4ade80; }
+.status-badge.running { background: rgba(56, 189, 248, 0.2); color: #7dd3fc; }
+.status-badge.planned { background: rgba(245, 158, 11, 0.2); color: #fcd34d; }
+
+.portal-footer {
+  text-align: center;
+  padding: 20px;
+  color: #64748b;
+  font-size: 0.9rem;
+  border-top: 1px solid #1e293b;
+}
