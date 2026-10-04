@@ -1,0 +1,44 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: NotificationService
+  
+  datasource:
+    url: jdbc:mysql://localhost:3307/notificationdb?createDatabaseIfNotExist=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+  # 1. Prevent Docker Compose startup crashes
+  docker:
+    compose:
+      enabled: false
+
+# 3. Expose Actuator for Prometheus scraping
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+metrics:
+  tags:
+    application: NotificationService
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
