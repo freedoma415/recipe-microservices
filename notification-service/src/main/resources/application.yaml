@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: NotificationService
+  config:
+    import: optional:configserver:http://localhost:8888  
   
   datasource:
     url: jdbc:mysql://localhost:3307/notificationdb?createDatabaseIfNotExist=true

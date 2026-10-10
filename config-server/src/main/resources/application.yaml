@@ -11,7 +11,7 @@ spring:
       server:
         native:
           # This points to a folder named 'config-repo' located in your root workspace
-          search-locations: file://${user.dir}/config-repo
+          search-locations: file:///Users/fridomaraya/Desktop/ReciepeAPI/config-repo
 
 eureka:
   client:
