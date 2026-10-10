@@ -1,0 +1,19 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-server
+  profiles:
+    active: native
+  cloud:
+    config:
+      server:
+        native:
+          # This points to a folder named 'config-repo' located in your root workspace
+          search-locations: file://${user.dir}/config-repo
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
