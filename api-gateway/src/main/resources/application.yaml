@@ -1,5 +1,6 @@
 server:
   port: 8080
+  max-http-request-header-size: 32KB
 
 spring:
   security:
@@ -10,6 +11,8 @@ spring:
     name: api-gateway
   cloud:
     gateway:
+      httpclient:
+        max-header-size: 32KB
       globalcors:
         cors-configurations:
           '[/**]':

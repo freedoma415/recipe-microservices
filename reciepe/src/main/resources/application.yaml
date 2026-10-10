@@ -20,6 +20,18 @@ spring:
   docker:
     compose:
       enabled: false
+  resilience4j:
+  circuitbreaker:
+    instances:
+      recipeService:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
 
 management:
   endpoints:

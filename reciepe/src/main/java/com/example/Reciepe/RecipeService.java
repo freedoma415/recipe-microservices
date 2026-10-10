@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +18,7 @@ public class RecipeService {
         return new RecipeResponse(recipe.getId(), recipe.getName(), recipe.getIngredients(), recipe.getDescription());
     }
 
+    @CircuitBreaker(name = "recipeService", fallbackMethod = "getAllRecipesFallback")
     public List<RecipeResponse> getAllRecipes() {
         return recipeRepository.findAll()
                 .stream()
@@ -24,10 +26,23 @@ public class RecipeService {
                 .collect(Collectors.toList());
     }
 
+    // Fallback method for getAllRecipes
+    public List<RecipeResponse> getAllRecipesFallback(Throwable t) {
+        System.err.println("CIRCUIT BREAKER OPEN: Fallback triggered for getAllRecipes because: " + t.getMessage());
+        return List.of(); // Returns an empty list safely instead of failing
+    }
+
+    @CircuitBreaker(name = "recipeService", fallbackMethod = "getRecipeByIdFallback")
     public RecipeResponse getRecipeById(Long id) {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Recipe not found"));
         return mapToResponse(recipe);
+    }
+
+    // Fallback method for getRecipeById
+    public RecipeResponse getRecipeByIdFallback(Long id, Throwable t) {
+        System.err.println("CIRCUIT BREAKER OPEN: Fallback for getRecipeById (ID: " + id + "). Reason: " + t.getMessage());
+        return new RecipeResponse(id, "Fallback Recipe", "N/A", "Service is temporarily unavailable.");
     }
 
     public RecipeResponse save(RecipeRequest request) {
