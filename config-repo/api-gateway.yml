@@ -1,0 +1,73 @@
+server:
+  port: 8080
+  max-http-request-header-size: 64KB
+
+spring:
+  security:
+    user:
+      name: admin
+      password: password
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      httpclient:
+        max-header-size: 64KB
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins:
+              - "http://localhost:3000"
+              - "http://localhost:3001"
+              - "http://localhost:3002"
+              - "http://localhost:8080"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowedHeaders: "*"
+      routes:
+        - id: drop-noise
+          uri: no://op
+          predicates:
+            - Path=/.well-known/**, /404, /actuator/**
+          filters:
+            - SetStatus=404
+
+        - id: recipe-service
+          uri: lb://reciepe
+          predicates:
+            - Path=/api/recipes/**, /api/reciepe/**
+
+        - id: notification-service
+          uri: lb://notification-service
+          predicates:
+            - Path=/api/notifications/**
+
+        - id: review-service
+          uri: lb://review-service
+          predicates:
+            - Path=/api/reviews, /api/reviews/**
+
+        - id: recipe-ui
+          uri: http://localhost:3001
+          predicates:
+            - Path=/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+management:
+  server:
+    port: 8081
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+  metrics:
+    tags:
+      application: api-gateway

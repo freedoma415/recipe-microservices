@@ -1,2 +1,49 @@
-test:
-  message: "Hello from the Centralized Config Server!"
+Server:
+  port: 8082
+
+spring:
+  application:
+    name: reciepe
+  datasource:
+    url: jdbc:mysql://localhost:3307/taskdb?createDatabaseIfNotExist=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  security:
+    user:
+      name: admin
+      password: password
+
+  docker:
+    compose:
+      enabled: false
+  resilience4j:
+  circuitbreaker:
+    instances:
+      recipeService:
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 2s
+        waitDurationInOpenState: 10s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+metrics:
+  tags:
+    application: reciepe
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/

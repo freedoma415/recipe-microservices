@@ -1,5 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import RecipeReviews from "./RecipeReviews";
+
+// Sub-component for individual recipe cards with live rating
+function RecipeCard({ recipe, onClick }) {
+  const [avgRating, setAvgRating] = useState("Loading...");
+
+  useEffect(() => {
+    fetch(`http://localhost:8080/api/reviews/recipe/${recipe.id}/average`)
+      .then(res => res.json())
+      .then(rating => setAvgRating(rating > 0 ? `⭐ ${rating} / 5` : "No ratings yet"))
+      .catch(() => setAvgRating("⭐ 0.0"));
+  }, [recipe.id]);
+
+  return (
+    <div className="recipe-card clickable" onClick={onClick}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h3 className="recipe-title" style={{ margin: 0 }}>{recipe.name}</h3>
+        <span style={{ fontWeight: "bold", color: "#f39c12", fontSize: "14px" }}>
+          {avgRating}
+        </span>
+      </div>
+      <span className="click-hint" style={{ display: "block", marginTop: "10px" }}>View Recipe &rarr;</span>
+    </div>
+  );
+}
 
 function App() {
   const [recipes, setRecipes] = useState([]);
@@ -10,7 +35,6 @@ function App() {
   const [isAdding, setIsAdding] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   
-  // Shared state for both Create and Update
   const [formData, setFormData] = useState({ name: '', ingredients: '', description: '' });
 
   useEffect(() => {
@@ -34,65 +58,65 @@ function App() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  
-  if (isEditing) {
+    e.preventDefault();
+    
+    if (isEditing) {
+      try {
+        const response = await fetch(`/api/recipes/${selectedRecipe.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) throw new Error(`Status: ${response.status}`);
+        const message = await response.text();
+        
+        alert(message);
+        fetchRecipes();
+        setIsEditing(false);
+        setSelectedRecipe(null);
+      } catch (err) {
+        alert("Failed to update recipe: " + err.message);
+      }
+    } else {
+      try {
+        const response = await fetch('/api/recipes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) throw new Error(`Status: ${response.status}`);
+        const message = await response.text();
+        
+        alert(message);
+        fetchRecipes();
+        setIsAdding(false);
+        setFormData({ name: '', ingredients: '', description: '' });
+      } catch (err) {
+        alert("Failed to add recipe: " + err.message);
+      }
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this recipe?")) return;
+    
     try {
-      const response = await fetch(`/api/recipes/${selectedRecipe.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+      const response = await fetch(`/api/recipes/${id}`, {
+        method: 'DELETE'
       });
       
       if (!response.ok) throw new Error(`Status: ${response.status}`);
       const message = await response.text();
       
       alert(message);
-      fetchRecipes();
-      setIsEditing(false);
+      setRecipes(recipes.filter(r => r.id !== id));
       setSelectedRecipe(null);
     } catch (err) {
-      alert("Failed to update recipe: " + err.message);
+      alert("Failed to delete recipe: " + err.message);
     }
-  } else {
-    try {
-      const response = await fetch('/api/recipes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-      
-      if (!response.ok) throw new Error(`Status: ${response.status}`);
-      const message = await response.text();
-      
-      alert(message);
-      fetchRecipes();
-      setIsAdding(false);
-      setFormData({ name: '', ingredients: '', description: '' });
-    } catch (err) {
-      alert("Failed to add recipe: " + err.message);
-    }
-  }
-};
-
-const handleDelete = async (id) => {
-  if (!window.confirm("Are you sure you want to delete this recipe?")) return;
-  
-  try {
-    const response = await fetch(`/api/recipes/${id}`, {
-      method: 'DELETE'
-    });
-    
-    if (!response.ok) throw new Error(`Status: ${response.status}`);
-    const message = await response.text();
-    
-    alert(message);
-    setRecipes(recipes.filter(r => r.id !== id));
-    setSelectedRecipe(null);
-  } catch (err) {
-    alert("Failed to delete recipe: " + err.message);
-  }
-};
+  };
 
   const openAddForm = () => {
     setIsAdding(true);
@@ -194,19 +218,19 @@ const handleDelete = async (id) => {
               <p className="recipe-description">{selectedRecipe.ingredients}</p>
             </div>
 
-            <div className="recipe-section">
+            <div className="recipe-section" style={{ marginBottom: '20px' }}>
               <h3 style={{ color: '#2c3e50', marginBottom: '8px' }}>Instructions</h3>
               <p className="recipe-description">{selectedRecipe.description}</p>
             </div>
+
+            {/* Attached 5-Star Reviews Component for this specific recipe */}
+            <RecipeReviews recipeId={selectedRecipe.id} />
           </div>
         </div>
       ) : (
         <div className="recipe-grid">
-          {!loading && !error && recipes.map((recipe, index) => (
-            <div key={index} className="recipe-card clickable" onClick={() => setSelectedRecipe(recipe)}>
-              <h3 className="recipe-title">{recipe.name}</h3>
-              <span className="click-hint">View Recipe &rarr;</span>
-            </div>
+          {!loading && !error && recipes.map((recipe) => (
+            <RecipeCard key={recipe.id} recipe={recipe} onClick={() => setSelectedRecipe(recipe)} />
           ))}
         </div>
       )}

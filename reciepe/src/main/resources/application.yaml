@@ -1,50 +1,7 @@
-Server:
-  port: 8082
-
 spring:
   application:
-    name: Reciepe
-  datasource:
-    url: jdbc:mysql://localhost:3307/taskdb?createDatabaseIfNotExist=true
-    username: root
-    password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-  security:
-    user:
-      name: admin
-      password: password
+    name: reciepe
+  profiles:
+    active: default
   config:
     import: optional:configserver:http://localhost:8888
-  docker:
-    compose:
-      enabled: false
-  resilience4j:
-  circuitbreaker:
-    instances:
-      recipeService:
-        slidingWindowType: COUNT_BASED
-        slidingWindowSize: 10
-        failureRateThreshold: 50
-        slowCallRateThreshold: 50
-        slowCallDurationThreshold: 2s
-        waitDurationInOpenState: 10s
-        permittedNumberOfCallsInHalfOpenState: 3
-        automaticTransitionFromOpenToHalfOpenEnabled: true
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,prometheus
-metrics:
-  tags:
-    application: RECIEPE
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
