@@ -13,6 +13,15 @@ spring:
           # This points to a folder named 'config-repo' located in your root workspace
           search-locations: file:///Users/fridomaraya/Desktop/ReciepeAPI/config-repo
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+metrics:
+  tags:
+    application: ReviewService
+
 eureka:
   client:
     service-url:
