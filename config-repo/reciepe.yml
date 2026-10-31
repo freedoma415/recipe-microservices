@@ -6,7 +6,7 @@ spring:
     name: reciepe
   datasource:
     url: jdbc:mysql://localhost:3307/taskdb?createDatabaseIfNotExist=true
-    username: root
+    username: user
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
@@ -45,5 +45,5 @@ metrics:
 
 eureka:
   client:
-    serviceUrl:
+    service-url:
       defaultZone: http://localhost:8761/eureka/
