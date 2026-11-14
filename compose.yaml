@@ -55,6 +55,7 @@ services:
       - "8888:8888"
     environment:
       - SPRING_PROFILES_ACTIVE=native
+      - SPRING_CLOUD_CONFIG_SERVER_NATIVE_SEARCHLOCATIONS=file:/config-repo
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
     volumes:
       - ./config-repo:/config-repo
@@ -75,21 +76,15 @@ services:
     ports:
       - "8082:8082"
     environment:
+      - SERVER_PORT=8082
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-<<<<<<< HEAD
       - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-=======
-<<<<<<< HEAD
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3307/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-=======
-      - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
->>>>>>> c91f842 (Update API gateway configuration and microservices setup)
->>>>>>> 05360ee
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
     command: ["--eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/"]
     depends_on:
       eureka-server:
@@ -100,6 +95,12 @@ services:
         condition: service_started
     networks:
       - recipe-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 40s
 
   review-service:
     build: ./review-service
@@ -107,21 +108,15 @@ services:
     ports:
       - "8084:8084"
     environment:
+      - SERVER_PORT=8084
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
-<<<<<<< HEAD
       - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-=======
-<<<<<<< HEAD
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3307/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-=======
-      - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
->>>>>>> c91f842 (Update API gateway configuration and microservices setup)
->>>>>>> 05360ee
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=recipe-kafka:9092
     command: ["--eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/"]
     depends_on:
@@ -142,20 +137,15 @@ services:
     ports:
       - "8083:8083"
     environment:
+      - SERVER_PORT=8083
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3307/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-=======
->>>>>>> 05360ee
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
->>>>>>> c91f842 (Update API gateway configuration and microservices setup)
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
       - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.MySQLDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=recipe-kafka:9092
       - SPRING_MAIL_HOST=sandbox.smtp.mailtrap.io
       - SPRING_MAIL_PORT=2525
@@ -180,6 +170,7 @@ services:
     ports:
       - "8080:8080"
     environment:
+      - SERVER_PORT=8080
       - SPRING_SECURITY_USER_NAME=admin
       - SPRING_SECURITY_USER_PASSWORD=password
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
@@ -187,13 +178,13 @@ services:
     command: ["--eureka.client.serviceUrl.defaultZone=http://eureka-server:8761/eureka/"]
     depends_on:
       eureka-server:
-        condition: service_healthy
+        condition: service_started
       config-server:
-        condition: service_healthy
-      recipe-service:
         condition: service_started
       review-service:
         condition: service_started
+      recipe-service:
+        condition: service_healthy
     networks:
       - recipe-net
 
@@ -211,32 +202,9 @@ services:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - "3000"
+      - "3000:3000"
     depends_on:
       - prometheus
-<<<<<<< HEAD
-=======
-    networks:
-      - recipe-net
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - recipe-net
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000"
-    depends_on:
-      - prometheus
->>>>>>> 05360ee
     networks:
       - recipe-net
 

@@ -39,7 +39,7 @@ spring:
         - id: recipe-service
           uri: lb://RECIEPE
           predicates:
-            - Path=/api/recipes/**, /api/reciepe/**
+            - Path=/api/recipes/**
 
         - id: notification-service
           uri: lb://NOTIFICATION-SERVICE
