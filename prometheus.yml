@@ -13,15 +13,7 @@ scrape_configs:
       username: 'admin'
       password: 'password'
     static_configs:
-<<<<<<< HEAD
       - targets: ['api-gateway:8080']
-=======
-<<<<<<< HEAD
-      - targets: ['host.docker.internal:8080']
-=======
-      - targets: ['api-gateway:8080']
->>>>>>> c91f842 (Update API gateway configuration and microservices setup)
->>>>>>> 05360ee
 
   - job_name: 'recipe-service'
     metrics_path: '/actuator/prometheus'
