@@ -77,7 +77,15 @@ services:
     environment:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+<<<<<<< HEAD
       - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+=======
+<<<<<<< HEAD
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3307/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+=======
+      - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+>>>>>>> c91f842 (Update API gateway configuration and microservices setup)
+>>>>>>> 05360ee
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
@@ -101,7 +109,15 @@ services:
     environment:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
+<<<<<<< HEAD
       - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+=======
+<<<<<<< HEAD
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3307/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+=======
+      - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+>>>>>>> c91f842 (Update API gateway configuration and microservices setup)
+>>>>>>> 05360ee
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
@@ -127,8 +143,15 @@ services:
       - "8083:8083"
     environment:
       - SPRING_CONFIG_IMPORT=optional:configserver:http://config-server:8888
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3307/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+=======
+>>>>>>> 05360ee
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - SPRING_DATASOURCE_URL=jdbc:mysql://recipe-mysql:3306/taskdb?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+>>>>>>> c91f842 (Update API gateway configuration and microservices setup)
       - SPRING_DATASOURCE_USERNAME=user
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=com.mysql.cj.jdbc.Driver
@@ -191,6 +214,29 @@ services:
       - "3000"
     depends_on:
       - prometheus
+<<<<<<< HEAD
+=======
+    networks:
+      - recipe-net
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - recipe-net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000"
+    depends_on:
+      - prometheus
+>>>>>>> 05360ee
     networks:
       - recipe-net
 
