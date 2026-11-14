@@ -1,11 +1,11 @@
-Server:
+server:
   port: 8082
 
 spring:
   application:
     name: reciepe
   datasource:
-    url: jdbc:mysql://localhost:3307/taskdb?createDatabaseIfNotExist=true
+    url: jdbc:mysql://recipe-mysql:3306/taskdb?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
     username: user
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -17,11 +17,11 @@ spring:
     user:
       name: admin
       password: password
-
   docker:
     compose:
       enabled: false
-  resilience4j:
+
+resilience4j:
   circuitbreaker:
     instances:
       recipeService:
@@ -39,6 +39,7 @@ management:
     web:
       exposure:
         include: health,prometheus
+
 metrics:
   tags:
     application: reciepe
@@ -46,4 +47,4 @@ metrics:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/

@@ -10,8 +10,10 @@ spring:
     config:
       server:
         native:
-          # This points to a folder named 'config-repo' located in your root workspace
           search-locations: file:///Users/fridomaraya/Desktop/ReciepeAPI/config-repo
+      # Correct indentation here under 'config':
+      allow-override: true
+      override-none: false
 
 management:
   endpoints:
@@ -25,4 +27,4 @@ metrics:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/

@@ -5,7 +5,7 @@ spring:
   application:
     name: notification-service
   datasource:
-    url: jdbc:mysql://localhost:3307/taskdb?createDatabaseIfNotExist=true
+    url: jdbc:mysql://recipe-mysql:3306/taskdb?createDatabaseIfNotExist=true
     username: user
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -52,4 +52,4 @@ metrics:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/

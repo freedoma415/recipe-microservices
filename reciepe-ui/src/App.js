@@ -7,7 +7,7 @@ function RecipeCard({ recipe, onClick }) {
   const [avgRating, setAvgRating] = useState("Loading...");
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/reviews/recipe/${recipe.id}/average`)
+    fetch(`/api/reviews/recipe/${recipe.id}/average`)
       .then(res => res.json())
       .then(rating => setAvgRating(rating > 0 ? `⭐ ${rating} / 5` : "No ratings yet"))
       .catch(() => setAvgRating("⭐ 0.0"));

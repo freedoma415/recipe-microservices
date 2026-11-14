@@ -37,33 +37,31 @@ spring:
             - SetStatus=404
 
         - id: recipe-service
-          uri: lb://reciepe
+          uri: lb://RECIEPE
           predicates:
             - Path=/api/recipes/**, /api/reciepe/**
 
         - id: notification-service
-          uri: lb://notification-service
+          uri: lb://NOTIFICATION-SERVICE
           predicates:
             - Path=/api/notifications/**
 
         - id: review-service
-          uri: lb://review-service
+          uri: lb://REVIEW-SERVICE
           predicates:
             - Path=/api/reviews, /api/reviews/**
 
         - id: recipe-ui
-          uri: http://localhost:3001
+          uri: http://host.docker.internal:3001
           predicates:
             - Path=/**
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
 
 management:
-  server:
-    port: 8081
   endpoints:
     web:
       exposure:
